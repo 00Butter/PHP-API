@@ -6,5 +6,15 @@ use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
-    //
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+        
+        return response()->json(['message' => 'member1111']);
+    }
 }
