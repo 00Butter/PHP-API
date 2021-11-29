@@ -1,0 +1,547 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "회원 및 주문 목록에 대한 API 문서 입니다.",
+    "version": "1.0.0",
+    "title": "라라벨 회원 API",
+    "termsOfService": "",
+    "contact": {
+      "email": "beei1004@naver.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "product",
+      "description": "주문속성",
+      "externalDocs": {
+        "description": "",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "user",
+      "description": "회원정보",
+      "externalDocs": {
+        "description": "",
+        "url": "http://swagger.io"
+      }
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/product": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "여러회원별 마지막주문내역조회",
+        "description": "",
+        "operationId": "주문내역",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "정상처리",
+            "schema": {
+              "$ref": "#/definitions/ProductList"
+            }
+          },
+          "204": {
+            "description": "조회 내역 없음",
+            "schema": {
+              "$ref": "#/definitions/Common"
+            }
+          },
+          "401": {
+            "description": "로그인 토큰 필요"
+          }
+        }
+      }
+    },
+    "/product/search/{search}": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "회원 주문목록 검색",
+        "operationId": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "path",
+            "description": "회원 이메일 or 이름",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "정상처리",
+            "schema": {
+              "$ref": "#/definitions/ProductList"
+            }
+          },
+          "204": {
+            "description": "조회 내역 없음",
+            "schema": {
+              "$ref": "#/definitions/Common"
+            }
+          },
+          "401": {
+            "description": "로그인 토큰 필요"
+          }
+        }
+      }
+    },
+    "/product/user/{id}": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "단일회원 주문 목록",
+        "operationId": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "회원 id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "정상처리",
+            "schema": {
+              "$ref": "#/definitions/SingleProductList"
+            }
+          },
+          "204": {
+            "description": "조회 내역 없음",
+            "schema": {
+              "$ref": "#/definitions/Common"
+            }
+          },
+          "401": {
+            "description": "로그인 토큰 필요"
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create user",
+        "operationId": "createUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "정상처리",
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          },
+          "400": {
+            "description": "유효성 검사 실패",
+            "schema": {
+              "$ref": "#/definitions/UserError"
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": " 회원 로그인",
+        "description": "",
+        "operationId": "loginUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "회원 이메일",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "비밀번호",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "정상처리",
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
+          },
+          "401": {
+            "description": "로그인 실패",
+            "schema": {
+              "$ref": "#/definitions/Common"
+            }
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "회원 로그아웃",
+        "description": "",
+        "operationId": "logoutUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "로그아웃 성공",
+            "schema": {
+              "$ref": "#/definitions/Common"
+            }
+          },
+          "401": {
+            "description": "로그인 토큰 필요"
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "회원 상세 정보 조회",
+        "description": "",
+        "operationId": "getUserById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "회원아이디",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/UserInfo"
+            }
+          },
+          "204": {
+            "description": "로그아웃 성공",
+            "schema": {
+              "$ref": "#/definitions/Common"
+            }
+          },
+          "401": {
+            "description": "로그인 토큰 필요"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "petstore_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
+      "flow": "implicit",
+      "scopes": {
+        "write:pets": "modify pets in your account",
+        "read:pets": "read your pets"
+      }
+    },
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "Common": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string",
+          "enum": [
+            "N",
+            "Y"
+          ]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "ProductList": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string",
+          "enum": [
+            "Y"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Product"
+          }
+        }
+      }
+    },
+    "SingleProductList": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string",
+          "enum": [
+            "Y"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SingleProduct"
+          }
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "no": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "product_name": {
+          "type": "string"
+        },
+        "order_date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "xml": {
+        "name": "Product"
+      }
+    },
+    "SingleProduct": {
+      "type": "object",
+      "properties": {
+        "no": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "order_num": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "order_date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "xml": {
+        "name": "Tag"
+      }
+    },
+    "UserError": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string",
+          "enum": [
+            "N",
+            "Y"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "errors": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Category"
+      }
+    },
+    "UserResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "result": {
+          "type": "string",
+          "enum": [
+            "Y"
+          ]
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "UserLogin": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        },
+        "token": {
+          "type": "string"
+        },
+        "result": {
+          "type": "string",
+          "enum": [
+            "Y"
+          ]
+        }
+      },
+      "xml": {
+        "name": "UserLogin"
+      }
+    },
+    "UserInfo": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        },
+        "result": {
+          "type": "string",
+          "enum": [
+            "Y"
+          ]
+        }
+      },
+      "xml": {
+        "name": "UserInfo"
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "nickname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}

@@ -20,7 +20,7 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $query = DB::table('users as u')->select('u.id','p.no','p.order_num', 'p.name', 'p.order_date');
+        $query = DB::table('users as u')->select('u.id','u.name','u.email','p.no','p.order_num', 'p.name as product_name', 'p.order_date');
         $query = $query->leftJoin("products as p", function ($join) {
             $join->on("p.no", "=", DB::raw('(select MAX(no) from products as c where c.user_id=u.id)'));
         })->orderby("id")->paginate(10);
@@ -60,7 +60,7 @@ class ProductController extends Controller
      */
     public function search($search)
     {
-         $query = DB::table('users as u')->select('u.id','u.name','p.no','p.order_num', 'p.name', 'p.order_date');
+         $query = DB::table('users as u')->select('u.id','u.email','u.name','p.no','p.order_num', 'p.name as product_name', 'p.order_date');
          $query = $query->leftJoin("products as p", function ($join) {
              $join->on("p.no", "=", DB::raw('(select MAX(no) from products as c where c.user_id=u.id)'));
          })->where('u.name',$search)->orwhere('u.email',$search)->orderby("id")->paginate(10);
