@@ -11,10 +11,10 @@ class AppController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function error()
     {
         //
-        
-        return response()->json(['message' => 'member1111']);
+        return response()->json( ['message' => '로그인 정보가 필요합니다','result'=>'N'], 401,[],JSON_UNESCAPED_UNICODE );
+       
     }
 }

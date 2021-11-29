@@ -46,17 +46,21 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            /*
             'read' => [
-                'host' => env('DB_HOST', '127.0.0.1'),
+                'host' => [
+                    'db'
+                ],
             ],
-            'wirte' => [
-                'host' => env('DB_HOST', '127.0.0.1'),
-            ],*/
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'write' => [
+                'host' => [
+                    'db'
+                ],
+            ],
+            'sticky' => true,
+            //'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'apidemo'),
-            'username' => env('DB_USERNAME', 'apidemo'),
+            'username' => env('DB_USERNAME', 'api'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
